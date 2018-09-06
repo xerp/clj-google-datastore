@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/xerp/clj-google-datastore.svg?style=svg)](https://circleci.com/gh/xerp/clj-google-datastore)
+
 # clj-google-datastore
 
 A Clojure library designed to use Google datastore Api https://cloud.google.com/datastore/docs/reference/data/rest
