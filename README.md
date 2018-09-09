@@ -2,6 +2,8 @@
 
 # clj-google-datastore
 
+[![Clojars Project](https://img.shields.io/clojars/v/clj-google-datastore.svg)](https://clojars.org/clj-google-datastore)
+
 A Clojure library designed to use Google datastore Api https://cloud.google.com/datastore/docs/reference/data/rest
 
 ## Installation
