@@ -1,6 +1,6 @@
 [![CircleCI](https://circleci.com/gh/xerp/clj-google-datastore.svg?style=svg)](https://circleci.com/gh/xerp/clj-google-datastore)
 
-# clj-google-datastore
+# Clojure Google Datastore
 
 [![Clojars Project](https://img.shields.io/clojars/v/clj-google-datastore.svg)](https://clojars.org/clj-google-datastore)
 
