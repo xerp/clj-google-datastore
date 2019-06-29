@@ -1,4 +1,4 @@
-(defproject clj-google-datastore "2.7"
+(defproject clj-google-datastore "2.8"
   :description "Google datastore api"
   :url "https://github.com/xerp/clj-google-datastore"
   :license {:name "Eclipse Public License"
