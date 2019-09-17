@@ -1,8 +1,9 @@
 (ns clj-google-datastore.core
   (:require [clj-http.client :as http]
             [cemerick.url :refer [url url-encode]]
-            [clojure.data.json :as json]
+            [clojure.data.json :as json-data]
             [clj-google.auth :refer [*access-token*]]
+            [clj-google.core :refer [json]]
             [clj-google-datastore.body :refer [request-body]]))
 
 (def ^:private datastore-base-url "https://datastore.googleapis.com")
@@ -16,15 +17,16 @@
 (defn- json-data
   [http-fn request-url data]
   (if-let [response (http-fn request-url data)]
-    (let [json-response (json/read-str (:body response) :key-fn keyword)]
+    (let [json-response (json (:body response))]
       json-response)))
 
 (defn- make-data
   [body-type body-data]
-  {:oauth-token  *access-token*
-   :body         (json/json-str (request-body body-type body-data))
-   :content-type :json
-   :accept       :json})
+  (let [request-body-data (request-body body-type body-data)]
+    {:oauth-token  *access-token*
+     :body         (json-data/json-str request-body-data)
+     :content-type :json
+     :accept       :json}))
 
 
 (defmacro defkind
@@ -81,13 +83,19 @@
 
 
 (defn insert
-  [project-id mode transaction entity-data]
+  [project-id mode entity-data & {:keys [transaction]
+                                  :or   {transaction {:transaction ""}}}]
+
   (commit project-id :insert mode entity-data :transaction transaction))
 
 (defn update
-  [project-id mode transaction entity-data]
+  [project-id mode entity-data & {:keys [transaction]
+                                  :or   {transaction {:transaction ""}}}]
+
   (commit project-id :update mode entity-data :transaction transaction))
 
 (defn delete
-  [project-id mode transaction entity-data]
+  [project-id mode entity-data & {:keys [transaction]
+                                  :or   {transaction {:transaction ""}}}]
+
   (commit project-id :delete mode entity-data :transaction transaction))
