@@ -2,27 +2,9 @@
   (:require [clj-google-datastore.filters :refer [get-filters]]
             [clj-google-datastore.projections :refer [get-projections]]
             [clj-google-datastore.orders :refer [get-orders]]
-            [clj-google-datastore.properties :refer [property-value]]
-            [clojure.string :as string]))
-
-
-(defn make-partition-id
-  [namespace]
-  {:namespaceId (name namespace)})
-
-(defn transform-properties
-  [properties]
-  (into {} (map #(hash-map (name (key %)) (property-value (val %))) properties)))
-
-
-(defn make-commit-mutation
-  [commit-type entity-data]
-  (let [{:keys [key properties]} entity-data]
-
-    {commit-type (case commit-type :delete key
-
-                                   {:key        key
-                                    :properties (transform-properties properties)})}))
+            [clj-google-datastore.factory :refer [make-partition-id
+                                                  make-commit-mutation
+                                                  make-commit-mode]]))
 
 (defmulti request-body (fn [request-type _] request-type))
 
@@ -49,6 +31,6 @@
 
 (defmethod request-body :commit [_ data]
   (let [[commit-type mode entity-data transaction] data]
-    {:mode        (string/upper-case (string/replace (name mode) #"-" "_"))
+    {:mode        (make-commit-mode mode)
      :mutations   [(make-commit-mutation commit-type entity-data)]
      :transaction (transaction :transaction)}))
