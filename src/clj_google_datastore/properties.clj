@@ -6,6 +6,21 @@
 (defprotocol PropertyValueProtocol
   (property-value [this]))
 
+(defn reverse-property-value
+  [value-map]
+  (let [[value-type value] (first (map #(vector (key %) (val %)) value-map))]
+    (case value-type
+      :nullValue nil
+      :stringValue value
+      :booleanValue (Boolean/parseBoolean value)
+      :integerValue (Long/parseLong value)
+      :doubleValue (Double/parseDouble value)
+      :timestampValue (DateTime/parse value)
+      :arrayValue (vec (map reverse-property-value (value :values)))
+      :entityValue (into {}
+                         (map #(hash-map (key %) (reverse-property-value (val %)))
+                              (value :properties))))))
+
 
 ; Primitive Properties
 (extend-protocol PropertyValueProtocol

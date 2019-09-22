@@ -1,5 +1,5 @@
 (ns clj-google-datastore.factory
-  (:require [clj-google-datastore.properties :refer [property-value]]
+  (:require [clj-google-datastore.properties :refer [property-value reverse-property-value]]
             [clojure.data.json :refer [json-str]]
             [clj-google.auth :refer [*access-token*]]
             [clojure.string :as string]))
@@ -16,6 +16,10 @@
 (defn make-properties
   [properties]
   (into {} (map #(hash-map (name (key %)) (property-value (val %))) properties)))
+
+(defn make-reverse-properties
+  [properties]
+  (into {} (map #(hash-map (key %) (reverse-property-value (val %))) properties)))
 
 
 (defn make-commit-mutation
